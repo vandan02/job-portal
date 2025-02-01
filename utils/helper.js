@@ -1,18 +1,20 @@
 const jwt=require('jsonwebtoken')
 const bcrypt=require('bcrypt')
-require('dotenv').config()
-
-
+require('dotenv').config();
  const generatetoken=async(data)=>{
+     console.log(data);
+     
   try {
       const token= await jwt.sign(data,process.env.secret_key)
-      return token.hash(user)
+      return token
   } catch (error) {
        throw new Error('Token Generation Failed')
   }
 
   }
   const hashpasswords=async(password)=>{
+  
+    
     try {
         const hash=await bcrypt.hash(password,10)
         return hash
