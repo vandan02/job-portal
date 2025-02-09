@@ -30,8 +30,18 @@ require('dotenv').config();
         throw new Error('Password Comparison Failed')
     }
   }
+
+  const decodetoken=async(token)=>{
+    try {
+        const data=await jwt.verify(token,process.env.secret_key)
+        return data
+    } catch (error) {
+        throw new Error('Token Verification Failed')
+    }
+  }
   module.exports = {
     generatetoken,
     hashpasswords,
-    comparePasswords
+    comparePasswords,
+    decodetoken,
   }

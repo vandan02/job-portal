@@ -5,8 +5,8 @@ module.exports ={
     let company=await Company.create(payload)
     return company
 },
-getAllCompany:async()=>{
-    let company=await Company.find()
+getAllCompany:async(query)=>{
+    let company=await Company.find(query)
     return company
 },
 getCompanyById:async(id)=>{

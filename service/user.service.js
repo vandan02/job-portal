@@ -1,6 +1,11 @@
 
-const { getuserbyemail, register, getuserbyid, updateuser, getallusers, getUserByQuery } = require("../repository/user.repo")
-const { hashpasswords, generatetoken, comparePasswords } = require("../utils/helper");
+const { getuserbyemail, register, getuserbyid, updateuser, getallusers, getUserByQuery } = require("../repository/user.repo");
+const sendgmail = require("../utils/email");
+const { hashpasswords, generatetoken, comparePasswords, decodetoken } = require("../utils/helper");
+const userdetailss=require("./userDtails.service");
+
+let map = new Map();
+
 module.exports ={
     createuser:async(data)=>{
       
@@ -21,12 +26,29 @@ module.exports ={
                role: user.role,
                name: user.name,
              })
-           
+             let otp = Math.round(Math.random() * 10000);
+             map.set(token, otp);
+             let url = `<div> <a href=http://localhost:8090/api/v1/users/verify/${token}/${otp} > click to verify </a> </div>`;
+             await sendgmail(user.email, "verify", url);
            
           return token;
      } catch (error) {
         throw new Error(error.message)
      }
+    },
+    verifyemail:async(token,otp)=>{
+      let userotp=map.get(token);
+    try {
+        if(userotp==otp){
+          let user=decodetoken(token);
+          user=await updateuser(user.id,{isVerified: true })
+          return user;
+        }
+        
+    } catch (error) {
+      throw new Error(error.message)
+    }
+
     },
     loginuser:async(data)=>{
       
@@ -43,6 +65,10 @@ module.exports ={
                 role: user.role,
                 name: user.name,
               })
+              let otp = Math.round(Math.random() * 10000);
+              map.set(token, otp);
+              let url = `<div> <a href=http://localhost:8090/api/v1/users/verify/${token}/${otp} > click to verify </a> </div>`;
+              await sendgmail(user.email, "verify", url);
            return token;
       } catch (error) {
          throw new Error(error.message)
@@ -54,11 +80,7 @@ module.exports ={
       user=await updateuser(id,data)
       return user  
      },
-   //   getuserbyid:async(id)=>{
-   //    let user=await getuserbyid(id)  
-   //    if (!user)  throw new Error("invalid id");   
-   //    return user  
-   //   },
+
      getallusers:async()=>{
       let user=await getallusers();
       if (!user)  throw new Error("No users found");
@@ -66,6 +88,7 @@ module.exports ={
      },
      deleteuserbyid:async(id)=>{
       let user=await getuserbyid(id);
+    
       if (!user)  throw new Error("invalid id");
       return user
      },
@@ -76,7 +99,8 @@ module.exports ={
      },
      finduserbyid:async(id)=>{
       let user=await getuserbyid(id)
+      let details=await userdetailss.getuserdetail(id)
       if (!user)  throw new Error("User not found");
-      return user
+      return {user,details}
      }
 }

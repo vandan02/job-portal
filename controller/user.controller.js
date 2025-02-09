@@ -1,5 +1,5 @@
 
-const { createuser, loginuser, updateuser, deleteuserbyid,  getallusers, getUserByQuery, finduserbyid } = require("../service/user.service")
+const { createuser, loginuser, updateuser, deleteuserbyid,  getallusers, getUserByQuery, finduserbyid, verifyemail } = require("../service/user.service")
 module.exports = {
     signup:async(req,res)=>{
       try {
@@ -55,6 +55,15 @@ module.exports = {
         return res.send(users);
       } catch (error) {
         res.send(error.message);
+      }
+    },
+    verifyEmail :async (req, res) => {
+      let { token, otp } = req.params;
+      try {
+        let User = await verifyemail(token, otp);
+        return res.send({ message:"Verified email"});
+      } catch (error) {
+        return res.status(404).send({ message: error.message });
       }
     }
       

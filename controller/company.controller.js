@@ -51,4 +51,12 @@ module.exports = {
             return res.status(500).json({ message: error.message });
         }
     },
+    getUnverified:async (req, res) => {
+        try {
+            let company=await companysevice.getAllUnverified()
+           return res.send(company)
+        } catch (error) {
+          return res.status(500).json({ error: error });
+            }
+      }
 };

@@ -9,4 +9,6 @@ routes.get("/", Ability(["ADMIN"]), company.getAllCompany);
 routes.get("/:id", company.getCompanyById);
 routes.put("/:id", Ability(["ADMIN", "HR"]), company.updateCompany);
 routes.delete( "/:id",Ability(["ADMIN", "HR"]),company.deleteCompany);
+routes.get( "/admin/unverified",Ability(["ADMIN"],company.getUnverified))
+
 module.exports =routes;

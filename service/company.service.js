@@ -25,5 +25,8 @@ module.exports ={
         let company = await companyRepository.deleteCompany(id);
         return company;
       },
-    
+      getAllUnverified :async () => {
+        let company = await companyRepository.getAllCompany({ isVerified: false });
+        return company;
+      } 
 }

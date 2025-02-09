@@ -1,9 +1,9 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const decodeToken = async (req, res, next) => {
-  const publicRoutes = ["/users/signup", "/users/login","/users/verify"];
-
-  if (publicRoutes.includes(req.url)) {
+  const publicRoutes = ["/users/signup", "/users/login"];
+url=req.url
+  if (publicRoutes.includes(req.url)||url.includes(url.includes("/users/varify")) ){
     return next();
   }
   let token = req.headers["authorization"];
