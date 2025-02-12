@@ -7,7 +7,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 
-app.use(index)
+app.use("/api/v1",index)
 
 let PORT=process.env.PORT||8080
 app.listen(PORT,(req,res)=>{
