@@ -6,7 +6,7 @@ module.exports = {
        try {
          let user = req.user.id;
          req.body.user = user;
-  let userDtails = await details.createUserDetails(request.body)   
+  let userDtails = await details.createUserDetails(req.body)   
   res.send(userDtails);
        } catch (error) {
         res.send({ error: error });

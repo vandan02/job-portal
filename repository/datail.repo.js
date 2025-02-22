@@ -3,7 +3,7 @@ const UserDetails = require("../model/user-detail")
 
 module.exports = {
     getuserbyid:async(userId)=>{
-       let user=await UserDetails.findOn({user:userId})
+       let user=await UserDetails.findOne({user:userId})
    return user;
     },
     createdetails:async(payload)=>{
